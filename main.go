@@ -38,6 +38,7 @@ func main() {
 }
 
 func tcpEcho(addr net.TCPAddr) {
+	log.Printf("tcp-echo is runnning on tcp mode, listening %s\n", addr.String())
 	l, err := net.ListenTCP("tcp", &addr)
 	if err != nil {
 		log.Fatal(err)
@@ -56,6 +57,8 @@ func tcpEcho(addr net.TCPAddr) {
 }
 
 func httpEcho(addr net.TCPAddr) {
+	addrStr := addr.String()
+	log.Printf("tcp-echo is runnning on http mode, listening %s\n", addrStr)
 	echoHandler := func(w http.ResponseWriter, req *http.Request) {
 		dump, err := httputil.DumpRequest(req, true)
 		if err != nil {
@@ -65,5 +68,5 @@ func httpEcho(addr net.TCPAddr) {
 		io.WriteString(w, string(dump))
 	}
 	http.HandleFunc("/", echoHandler)
-	log.Fatal(http.ListenAndServe(addr.String(), nil))
+	log.Fatal(http.ListenAndServe(addrStr, nil))
 }
